@@ -1,0 +1,23 @@
+# Include base requirements
+-r base.txt
+
+# Production-specific packages
+gunicorn>=20.1.0,<21.0.0
+uvicorn>=0.22.0,<1.0.0
+whitenoise>=6.4.0,<7.0.0
+
+# Monitoring and Error Tracking
+sentry-sdk>=1.24.0,<2.0.0
+
+# Performance
+django-prometheus>=2.2.0,<3.0.0
+
+# Security
+django-honeypot>=1.0.1,<2.0.0
+
+# AWS
+boto3>=1.26.133,<2.0.0
+
+# Caching and Task Queue
+celery>=5.2.7,<6.0.0
+redis>=4.5.5,<5.0.0

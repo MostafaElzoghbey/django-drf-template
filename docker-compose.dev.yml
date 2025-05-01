@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: django-drf-template-dev
+    container_name: django-drf-template-web-dev
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.development
+    depends_on:
+      - db
+      - redis
+    networks:
+      - django-network-dev
+
+  db:
+    image: postgres:14-alpine
+    container_name: django-drf-template-db-dev
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+    ports:
+      - "5432:5432"
+    networks:
+      - django-network-dev
+
+  redis:
+    image: redis:7-alpine
+    container_name: django-drf-template-redis-dev
+    ports:
+      - "6379:6379"
+    networks:
+      - django-network-dev
+
+networks:
+  django-network-dev:
+    driver: bridge
+
+volumes:
+  postgres_data_dev:

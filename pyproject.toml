@@ -1,0 +1,177 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drf_template_api"
+version = "0.1.0"
+description = "A Django Rest Framework starter template"
+authors = [{name = "Your Name", email = "your@email.com"}]
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+classifiers = [
+    "Framework :: Django",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "Django>=4.2,<5.0",
+    "djangorestframework>=3.14.0",
+    "django-filter>=23.2",
+    "djangorestframework-simplejwt>=5.3.0",
+    "drf-spectacular>=0.26.0,<0.27.0",
+    "psycopg2-binary>=2.9.9",
+    "dj-database-url",
+    "python-dotenv>=1.0.0",
+    "django-cors-headers>=4.3.0",
+    "django-permissions-policy>=4.18.0",
+    "Pillow>=10.0.1",
+    "python-dateutil>=2.8.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.1.1",
+    "isort>=5.13.2",
+    "ruff>=0.1.14",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+    "django-stubs>=4.2.7",
+    "djangorestframework-stubs>=3.14.5",
+    "bandit>=1.7.6",
+    "django-debug-toolbar>=4.2.0",
+    "ipython>=8.15.0",
+    "pytest>=7.4.2",
+    "pytest-django>=4.5.2",
+    "pytest-cov>=4.1.0",
+    "factory-boy>=3.3.0",
+    "coverage>=7.3.2",
+    "sphinx>=7.2.6",
+    "sphinx-rtd-theme>=1.3.0",
+    "build>=1.0.3",
+    "twine>=4.0.2",
+    "tox>=4.11.4",
+    "virtualenv>=20.25.0",
+]
+
+test = [
+    "pytest>=7.4.2",
+    "pytest-django>=4.5.2",
+    "pytest-cov>=4.1.0",
+    "factory-boy>=3.3.0",
+    "coverage>=7.3.2",
+    "faker",
+]
+
+docs = [
+    "sphinx>=7.2.6",
+    "sphinx-rtd-theme>=1.3.0",
+]
+
+types = [
+    "mypy>=1.8.0",
+    "django-stubs>=4.2.7",
+    "djangorestframework-stubs>=3.14.5",
+    "types-requests>=2.31.0.20240125",
+    "types-python-dateutil>=2.8.19.14",
+    "types-Pillow",
+    "types-PyYAML>=6.0.12.12",
+    "types-toml>=0.10.8.7",
+]
+
+prod = [
+    "gunicorn>=21.2.0",
+    "whitenoise>=6.5.0",
+    "django-storages>=1.14.1",
+    "sentry-sdk>=1.35.0",
+    "django-redis==5.4.0",
+    "django-cachalot>=2.6.1",
+
+    "boto3>=1.28.38",
+]
+
+[tool.setuptools.packages.find]
+include = ["config*", "apps*", "api*"]
+exclude = ["media*", "static*", "templates*", "logs*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.html", "*.css", "*.js", "*.txt", "*.md"]
+
+
+[tool.black]
+line-length = 88
+target-version = ["py39", "py310", "py311"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | env
+  | venv
+  | migrations
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 88
+known_first_party = ["config", "apps", "api"]
+known_django = ["django", "rest_framework"]
+sections = ["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+skip = ["migrations", ".git", "env", ".env", "venv", "__pycache__", "static", "media"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+
+[[tool.mypy.overrides]]
+module = ["*.migrations.*"]
+ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings.local"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.testing"
+python_files = "test_*.py tests.py"
+testpaths = ["apps", "api"]
+addopts = "--cov=. --cov-report=term --cov-report=html"
+
+[tool.coverage.run]
+source = ["apps", "api", "config"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "manage.py",
+    "config/settings/*",
+    "config/asgi.py",
+    "config/wsgi.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "pass",
+    "raise ImportError",
+]
