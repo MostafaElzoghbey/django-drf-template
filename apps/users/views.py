@@ -6,7 +6,6 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
 
 from apps.core.views import ModelViewSet
 from apps.users.serializers import (
@@ -65,7 +64,9 @@ class UserViewSet(ModelViewSet):
         Return the current user's profile.
         """
         serializer = self.get_serializer(request.user)
-        return Response(serializer.data)
+        return self.get_response(
+            data=serializer.data, message="User profile retrieved successfully"
+        )
 
     @action(detail=False, methods=["post"], permission_classes=[IsAuthenticated])
     def change_password(self, request):
@@ -80,7 +81,6 @@ class UserViewSet(ModelViewSet):
         user.set_password(serializer.validated_data["new_password"])
         user.save()
 
-        return Response(
-            {"message": "Password changed successfully."},
-            status=status.HTTP_200_OK,
+        return self.get_response(
+            message="Password changed successfully.", code=status.HTTP_200_OK
         )
