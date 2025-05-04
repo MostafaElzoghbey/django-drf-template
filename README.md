@@ -4,16 +4,16 @@ A professional, reusable Django REST Framework template for building scalable an
 
 ## Features
 
-- Modular app structure with clear separation of concerns
-- Custom user model with authentication system
-- JWT authentication
-- Standardized API response formatting
-- Environment-based configuration
-- Docker setup for development and production
-- Comprehensive test setup
-- API documentation with Swagger/OpenAPI
-- Logging and monitoring
-- Security best practices
+-   Modular app structure with clear separation of concerns
+-   Custom user model with authentication system
+-   JWT authentication
+-   Standardized API response formatting
+-   Environment-based configuration
+-   Docker setup for development and production
+-   Comprehensive test setup
+-   API documentation with drf-spectacular (Swagger/OpenAPI)
+-   Logging and monitoring
+-   Security best practices
 
 ## Project Structure
 
@@ -40,65 +40,73 @@ django-drf-template/
 
 ### Prerequisites
 
-- Python 3.8+
-- PostgreSQL
-- Docker and Docker Compose (optional)
+-   Python 3.8+
+-   PostgreSQL
+-   Docker and Docker Compose (optional)
 
 ### Installation
 
 1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/django-drf-template.git
-   cd django-drf-template
-   ```
+
+    ```
+    git clone https://github.com/yourusername/django-drf-template.git
+    cd django-drf-template
+    ```
 
 2. Create a virtual environment and activate it:
-   ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+
+    ```
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    ```
 
 3. Install dependencies:
-   ```
-   pip install -r requirements/development.txt
-   ```
+
+    ```
+    pip install -r requirements/development.txt
+    ```
 
 4. Create a `.env` file from the example:
-   ```
-   cp .env.example .env
-   ```
+
+    ```
+    cp .env.example .env
+    ```
 
 5. Run migrations:
-   ```
-   python manage.py migrate
-   ```
+
+    ```
+    python manage.py migrate
+    ```
 
 6. Create a superuser:
-   ```
-   python manage.py createsuperuser
-   ```
+
+    ```
+    python manage.py createsuperuser
+    ```
 
 7. Run the development server:
-   ```
-   python manage.py runserver
-   ```
+    ```
+    python manage.py runserver
+    ```
 
 ### Using Docker
 
 1. Build and start the containers:
-   ```
-   docker-compose up -d --build
-   ```
+
+    ```
+    docker-compose up -d --build
+    ```
 
 2. Run migrations:
-   ```
-   docker-compose exec web python manage.py migrate
-   ```
+
+    ```
+    docker-compose exec web python manage.py migrate
+    ```
 
 3. Create a superuser:
-   ```
-   docker-compose exec web python manage.py createsuperuser
-   ```
+    ```
+    docker-compose exec web python manage.py createsuperuser
+    ```
 
 ## API Documentation
 

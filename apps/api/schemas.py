@@ -2,142 +2,78 @@
 API schemas for the API app.
 """
 
-from drf_yasg import openapi
+from drf_spectacular.utils import OpenApiExample, OpenApiResponse
 
-# Standard response schema
-standard_response_schema = {
-    "type": "object",
-    "properties": {
-        "status": {
-            "type": "string",
-            "enum": ["success", "error"],
-            "description": "The status of the response",
-        },
-        "code": {
-            "type": "integer",
-            "description": "The HTTP status code",
-        },
-        "data": {
-            "type": "object",
-            "description": "The response data (for success responses)",
-        },
-        "message": {
-            "type": "string",
-            "description": "A message describing the response",
-        },
-        "errors": {
-            "type": "object",
-            "description": "Errors that occurred (for error responses)",
-        },
+from apps.core.schemas import custom_extend_schema
+
+# Standard response schema examples
+standard_success_example = OpenApiExample(
+    name="success_response",
+    value={
+        "status": "success",
+        "code": 200,
+        "data": {"example": "data"},
+        "message": "Operation successful",
     },
-    "required": ["status", "code"],
-}
+    description="Standard success response",
+)
 
-# Authentication response schema
-auth_response_schema = {
-    "type": "object",
-    "properties": {
-        "status": {
-            "type": "string",
-            "enum": ["success"],
-            "description": "The status of the response",
-        },
-        "code": {
-            "type": "integer",
-            "description": "The HTTP status code",
-        },
+auth_success_example = OpenApiExample(
+    name="auth_success_response",
+    value={
+        "status": "success",
+        "code": 200,
         "data": {
-            "type": "object",
-            "properties": {
-                "refresh": {
-                    "type": "string",
-                    "description": "The refresh token",
-                },
-                "access": {
-                    "type": "string",
-                    "description": "The access token",
-                },
-                "user": {
-                    "type": "object",
-                    "properties": {
-                        "id": {
-                            "type": "string",
-                            "format": "uuid",
-                            "description": "The user ID",
-                        },
-                        "email": {
-                            "type": "string",
-                            "format": "email",
-                            "description": "The user email",
-                        },
-                        "first_name": {
-                            "type": "string",
-                            "description": "The user first name",
-                        },
-                        "last_name": {
-                            "type": "string",
-                            "description": "The user last name",
-                        },
-                    },
-                    "required": ["id", "email"],
-                },
+            "refresh": "refresh_token_example",
+            "access": "access_token_example",
+            "user": {
+                "id": "user_id_example",
+                "email": "user@example.com",
+                "first_name": "First",
+                "last_name": "Last",
             },
-            "required": ["refresh", "access", "user"],
         },
-        "message": {
-            "type": "string",
-            "description": "A message describing the response",
-        },
+        "message": "Login successful",
     },
-    "required": ["status", "code", "data"],
-}
-
-# Error response schema
-error_response_schema = {
-    "type": "object",
-    "properties": {
-        "status": {
-            "type": "string",
-            "enum": ["error"],
-            "description": "The status of the response",
-        },
-        "code": {
-            "type": "integer",
-            "description": "The HTTP status code",
-        },
-        "message": {
-            "type": "string",
-            "description": "A message describing the error",
-        },
-        "errors": {
-            "type": "object",
-            "description": "Errors that occurred",
-        },
-    },
-    "required": ["status", "code", "message"],
-}
-
-# Swagger parameter definitions
-token_param = openapi.Parameter(
-    "Authorization",
-    openapi.IN_HEADER,
-    description="JWT token in the format: Bearer <token>",
-    type=openapi.TYPE_STRING,
-    required=True,
-)
-
-# Swagger response definitions
-standard_success_response = openapi.Response(
-    description="Success response",
-    schema=openapi.Schema(**standard_response_schema),
-)
-
-auth_success_response = openapi.Response(
     description="Authentication success response",
-    schema=openapi.Schema(**auth_response_schema),
 )
 
-error_response = openapi.Response(
+error_example = OpenApiExample(
+    name="error_response",
+    value={
+        "status": "error",
+        "code": 400,
+        "message": "An error occurred",
+        "errors": {"field": ["Error details"]},
+    },
     description="Error response",
-    schema=openapi.Schema(**error_response_schema),
+)
+
+# Reusable schema extensions
+standard_response = custom_extend_schema(
+    examples=[standard_success_example],
+)
+
+auth_response = custom_extend_schema(
+    examples=[auth_success_example],
+)
+
+error_response = custom_extend_schema(
+    examples=[error_example],
+)
+
+# Reusable responses
+standard_success_response = OpenApiResponse(
+    description="Success response",
+    examples=[standard_success_example],
+)
+
+auth_success_response = OpenApiResponse(
+    description="Authentication success response",
+    examples=[auth_success_example],
+)
+
+error_response_400 = OpenApiResponse(
+    description="Error response",
+    examples=[error_example],
 )

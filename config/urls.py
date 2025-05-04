@@ -6,22 +6,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
-from rest_framework import permissions
 
-# API documentation schema view
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Django DRF Template API",
-        default_version="v1",
-        description="API documentation for Django DRF Template",
-        terms_of_service="https://www.example.com/terms/",
-        contact=openapi.Contact(email="contact@example.com"),
-        license=openapi.License(name="MIT License"),
-    ),
-    public=True,
-    permission_classes=[permissions.AllowAny],
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
 )
 
 # API URL patterns
@@ -39,16 +28,18 @@ urlpatterns = [
     # API v1
     path("api/v1/", include(api_urlpatterns)),
 
+    # API Schema
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     # API documentation
     path(
         "api/docs/",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
     ),
     path(
         "api/redoc/",
-        schema_view.with_ui("redoc", cache_timeout=0),
-        name="schema-redoc",
+        SpectacularRedocView.as_view(url_name="schema"),
+        name="redoc",
     ),
 ]
 
@@ -59,6 +50,7 @@ if settings.DEBUG:
     # Debug toolbar
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar
+
         urlpatterns = [
             path("__debug__/", include(debug_toolbar.urls)),
         ] + urlpatterns

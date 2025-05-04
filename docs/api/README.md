@@ -2,6 +2,8 @@
 
 This document provides an overview of the API endpoints available in the Django DRF Template.
 
+The API documentation is available at `/api/docs/` when the server is running. It is generated using drf-spectacular (Swagger/OpenAPI).
+
 ## Authentication
 
 The API uses JWT (JSON Web Token) authentication. To authenticate, you need to obtain a token by sending your credentials to the login endpoint.
@@ -11,29 +13,31 @@ The API uses JWT (JSON Web Token) authentication. To authenticate, you need to o
 **Endpoint:** `POST /api/v1/auth/login/`
 
 **Request Body:**
+
 ```json
 {
-  "email": "your.email@example.com",
-  "password": "your_password"
+    "email": "your.email@example.com",
+    "password": "your_password"
 }
 ```
 
 **Response:**
+
 ```json
 {
-  "status": "success",
-  "code": 200,
-  "data": {
-    "refresh": "your_refresh_token",
-    "access": "your_access_token",
-    "user": {
-      "id": "user_id",
-      "email": "your.email@example.com",
-      "first_name": "Your",
-      "last_name": "Name"
-    }
-  },
-  "message": "Login successful"
+    "status": "success",
+    "code": 200,
+    "data": {
+        "refresh": "your_refresh_token",
+        "access": "your_access_token",
+        "user": {
+            "id": "user_id",
+            "email": "your.email@example.com",
+            "first_name": "Your",
+            "last_name": "Name"
+        }
+    },
+    "message": "Login successful"
 }
 ```
 
@@ -50,21 +54,23 @@ Authorization: Bearer your_access_token
 **Endpoint:** `POST /api/v1/auth/token/refresh/`
 
 **Request Body:**
+
 ```json
 {
-  "refresh": "your_refresh_token"
+    "refresh": "your_refresh_token"
 }
 ```
 
 **Response:**
+
 ```json
 {
-  "status": "success",
-  "code": 200,
-  "data": {
-    "access": "new_access_token"
-  },
-  "message": "Token refreshed successfully"
+    "status": "success",
+    "code": 200,
+    "data": {
+        "access": "new_access_token"
+    },
+    "message": "Token refreshed successfully"
 }
 ```
 
@@ -73,18 +79,20 @@ Authorization: Bearer your_access_token
 **Endpoint:** `POST /api/v1/auth/logout/`
 
 **Request Body:**
+
 ```json
 {
-  "refresh": "your_refresh_token"
+    "refresh": "your_refresh_token"
 }
 ```
 
 **Response:**
+
 ```json
 {
-  "status": "success",
-  "code": 200,
-  "message": "Logout successful"
+    "status": "success",
+    "code": 200,
+    "message": "Logout successful"
 }
 ```
 
@@ -97,31 +105,32 @@ Authorization: Bearer your_access_token
 **Authentication:** Required
 
 **Response:**
+
 ```json
 {
-  "status": "success",
-  "code": 200,
-  "data": {
-    "count": 1,
-    "next": null,
-    "previous": null,
-    "results": [
-      {
-        "id": "user_id",
-        "email": "user@example.com",
-        "first_name": "User",
-        "last_name": "Name",
-        "bio": "",
-        "profile_picture": null,
-        "phone_number": "",
-        "date_joined": "2023-01-01T00:00:00Z",
-        "created_at": "2023-01-01T00:00:00Z",
-        "updated_at": "2023-01-01T00:00:00Z"
-      }
-    ],
-    "total_pages": 1,
-    "current_page": 1
-  }
+    "status": "success",
+    "code": 200,
+    "data": {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": "user_id",
+                "email": "user@example.com",
+                "first_name": "User",
+                "last_name": "Name",
+                "bio": "",
+                "profile_picture": null,
+                "phone_number": "",
+                "date_joined": "2023-01-01T00:00:00Z",
+                "created_at": "2023-01-01T00:00:00Z",
+                "updated_at": "2023-01-01T00:00:00Z"
+            }
+        ],
+        "total_pages": 1,
+        "current_page": 1
+    }
 }
 ```
 
@@ -132,22 +141,23 @@ Authorization: Bearer your_access_token
 **Authentication:** Required
 
 **Response:**
+
 ```json
 {
-  "status": "success",
-  "code": 200,
-  "data": {
-    "id": "user_id",
-    "email": "user@example.com",
-    "first_name": "User",
-    "last_name": "Name",
-    "bio": "",
-    "profile_picture": null,
-    "phone_number": "",
-    "date_joined": "2023-01-01T00:00:00Z",
-    "created_at": "2023-01-01T00:00:00Z",
-    "updated_at": "2023-01-01T00:00:00Z"
-  }
+    "status": "success",
+    "code": 200,
+    "data": {
+        "id": "user_id",
+        "email": "user@example.com",
+        "first_name": "User",
+        "last_name": "Name",
+        "bio": "",
+        "profile_picture": null,
+        "phone_number": "",
+        "date_joined": "2023-01-01T00:00:00Z",
+        "created_at": "2023-01-01T00:00:00Z",
+        "updated_at": "2023-01-01T00:00:00Z"
+    }
 }
 ```
 
@@ -158,28 +168,30 @@ Authorization: Bearer your_access_token
 **Authentication:** Not required
 
 **Request Body:**
+
 ```json
 {
-  "email": "new.user@example.com",
-  "password": "password",
-  "password_confirm": "password",
-  "first_name": "New",
-  "last_name": "User"
+    "email": "new.user@example.com",
+    "password": "password",
+    "password_confirm": "password",
+    "first_name": "New",
+    "last_name": "User"
 }
 ```
 
 **Response:**
+
 ```json
 {
-  "status": "success",
-  "code": 201,
-  "data": {
-    "id": "user_id",
-    "email": "new.user@example.com",
-    "first_name": "New",
-    "last_name": "User"
-  },
-  "message": "Resource created successfully"
+    "status": "success",
+    "code": 201,
+    "data": {
+        "id": "user_id",
+        "email": "new.user@example.com",
+        "first_name": "New",
+        "last_name": "User"
+    },
+    "message": "Resource created successfully"
 }
 ```
 
@@ -190,33 +202,35 @@ Authorization: Bearer your_access_token
 **Authentication:** Required
 
 **Request Body:**
+
 ```json
 {
-  "first_name": "Updated",
-  "last_name": "Name",
-  "bio": "This is my bio",
-  "phone_number": "1234567890"
+    "first_name": "Updated",
+    "last_name": "Name",
+    "bio": "This is my bio",
+    "phone_number": "1234567890"
 }
 ```
 
 **Response:**
+
 ```json
 {
-  "status": "success",
-  "code": 200,
-  "data": {
-    "id": "user_id",
-    "email": "user@example.com",
-    "first_name": "Updated",
-    "last_name": "Name",
-    "bio": "This is my bio",
-    "profile_picture": null,
-    "phone_number": "1234567890",
-    "date_joined": "2023-01-01T00:00:00Z",
-    "created_at": "2023-01-01T00:00:00Z",
-    "updated_at": "2023-01-01T00:00:00Z"
-  },
-  "message": "Resource updated successfully"
+    "status": "success",
+    "code": 200,
+    "data": {
+        "id": "user_id",
+        "email": "user@example.com",
+        "first_name": "Updated",
+        "last_name": "Name",
+        "bio": "This is my bio",
+        "profile_picture": null,
+        "phone_number": "1234567890",
+        "date_joined": "2023-01-01T00:00:00Z",
+        "created_at": "2023-01-01T00:00:00Z",
+        "updated_at": "2023-01-01T00:00:00Z"
+    },
+    "message": "Resource updated successfully"
 }
 ```
 
@@ -227,20 +241,22 @@ Authorization: Bearer your_access_token
 **Authentication:** Required
 
 **Request Body:**
+
 ```json
 {
-  "old_password": "current_password",
-  "new_password": "new_password",
-  "new_password_confirm": "new_password"
+    "old_password": "current_password",
+    "new_password": "new_password",
+    "new_password_confirm": "new_password"
 }
 ```
 
 **Response:**
+
 ```json
 {
-  "status": "success",
-  "code": 200,
-  "message": "Password changed successfully."
+    "status": "success",
+    "code": 200,
+    "message": "Password changed successfully."
 }
 ```
 
@@ -253,18 +269,20 @@ Authorization: Bearer your_access_token
 **Authentication:** Not required
 
 **Request Body:**
+
 ```json
 {
-  "email": "user@example.com"
+    "email": "user@example.com"
 }
 ```
 
 **Response:**
+
 ```json
 {
-  "status": "success",
-  "code": 200,
-  "message": "Password reset email sent"
+    "status": "success",
+    "code": 200,
+    "message": "Password reset email sent"
 }
 ```
 
@@ -275,21 +293,23 @@ Authorization: Bearer your_access_token
 **Authentication:** Not required
 
 **Request Body:**
+
 ```json
 {
-  "uid": "uid_from_email",
-  "token": "token_from_email",
-  "new_password": "new_password",
-  "new_password_confirm": "new_password"
+    "uid": "uid_from_email",
+    "token": "token_from_email",
+    "new_password": "new_password",
+    "new_password_confirm": "new_password"
 }
 ```
 
 **Response:**
+
 ```json
 {
-  "status": "success",
-  "code": 200,
-  "message": "Password reset successful"
+    "status": "success",
+    "code": 200,
+    "message": "Password reset successful"
 }
 ```
 
@@ -300,18 +320,20 @@ Authorization: Bearer your_access_token
 **Authentication:** Not required
 
 **Request Body:**
+
 ```json
 {
-  "uid": "uid_from_email",
-  "token": "token_from_email"
+    "uid": "uid_from_email",
+    "token": "token_from_email"
 }
 ```
 
 **Response:**
+
 ```json
 {
-  "status": "success",
-  "code": 200,
-  "message": "Email verified successfully"
+    "status": "success",
+    "code": 200,
+    "message": "Email verified successfully"
 }
 ```

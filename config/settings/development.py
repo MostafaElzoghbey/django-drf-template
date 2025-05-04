@@ -7,7 +7,6 @@ These settings extend the base settings and add development-specific settings.
 import socket
 
 from .base import *  # noqa
-from .base import env
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

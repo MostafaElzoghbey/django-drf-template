@@ -45,7 +45,7 @@ THIRD_PARTY_APPS = [
     # "dj_rest_auth",
     "corsheaders",
     "django_filters",
-    "drf_yasg",
+    "drf_spectacular",
 ]
 
 LOCAL_APPS = [
@@ -148,9 +148,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
     ),
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_SCHEMA_CLASS": "apps.core.schemas.CustomAutoSchema",
     "DEFAULT_PAGINATION_CLASS": "apps.core.pagination.StandardResultsSetPagination",
     "PAGE_SIZE": 10,
     "DEFAULT_FILTER_BACKENDS": (
@@ -249,10 +252,89 @@ LOGGING = {
 LOGS_DIR = BASE_DIR / "logs"
 LOGS_DIR.mkdir(exist_ok=True, parents=True)
 
-# Swagger settings
-SWAGGER_SETTINGS = {
-    "SECURITY_DEFINITIONS": {
-        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
+# DRF Spectacular settings
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Django DRF Template API",
+    "DESCRIPTION": "API documentation for Django DRF Template",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SCHEMA_PATH_PREFIX": "/api/v[0-9]",
+    "COMPONENT_SPLIT_REQUEST": True,
+    "COMPONENT_SPLIT_RESPONSE": True,
+    "SCHEMA_GENERATOR_CLASS": "apps.core.schemas.CustomSchemaGenerator",
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
     },
-    "USE_SESSION_AUTH": False,
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+        }
+    },
+    # Example settings
+    "DEFAULT_EXAMPLES_MATCH_MEDIA_TYPE": True,
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+            }
+        },
+        "schemas": {
+            "StandardResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "enum": ["success", "error"],
+                        "description": "The status of the response",
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "The HTTP status code",
+                    },
+                    "data": {
+                        "type": "object",
+                        "description": "The response data (for success responses)",
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A message describing the response",
+                    },
+                    "errors": {
+                        "type": "object",
+                        "description": "Errors that occurred (for error responses)",
+                    },
+                },
+                "required": ["status", "code"],
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "enum": ["error"],
+                        "description": "The status of the response",
+                    },
+                    "code": {
+                        "type": "integer",
+                        "description": "The HTTP status code",
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "A message describing the error",
+                    },
+                    "errors": {
+                        "type": "object",
+                        "description": "Errors that occurred",
+                    },
+                },
+                "required": ["status", "code", "message"],
+            },
+        },
+    },
 }

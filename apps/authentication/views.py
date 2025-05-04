@@ -21,10 +21,16 @@ from apps.authentication.serializers import (
     PasswordResetRequestSerializer,
 )
 from apps.core.utils.helpers import format_response
+from apps.core.schemas import custom_extend_schema
 
 User = get_user_model()
 
 
+@custom_extend_schema(
+    summary="Obtain JWT token",
+    description="Obtain JWT token pair (access and refresh tokens)",
+    tags=["Authentication"],
+)
 class CustomTokenObtainPairView(TokenObtainPairView):
     """
     Custom token obtain pair view that uses our custom serializer.
@@ -33,11 +39,21 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 
+@custom_extend_schema(
+    summary="Refresh JWT token",
+    description="Refresh JWT access token using refresh token",
+    tags=["Authentication"],
+)
 class CustomTokenRefreshView(TokenRefreshView):
     """
     Custom token refresh view.
     """
 
+    @custom_extend_schema(
+        summary="Refresh token",
+        description="Get a new access token using a refresh token",
+        tags=["Authentication"],
+    )
     def post(self, request, *args, **kwargs):
         """
         Return a refreshed token.
@@ -61,6 +77,12 @@ class LoginView(APIView):
 
     permission_classes = [AllowAny]
 
+    @custom_extend_schema(
+        request=LoginSerializer,
+        summary="User login",
+        description="Log in a user and return a token",
+        tags=["Authentication"],
+    )
     def post(self, request):
         """
         Log in a user and return a token.
@@ -96,6 +118,21 @@ class LogoutView(APIView):
 
     permission_classes = [IsAuthenticated]
 
+    @custom_extend_schema(
+        request={
+            "type": "object",
+            "properties": {
+                "refresh": {
+                    "type": "string",
+                    "description": "Refresh token to blacklist",
+                }
+            },
+            "required": ["refresh"],
+        },
+        summary="User logout",
+        description="Log out a user by blacklisting their refresh token",
+        tags=["Authentication"],
+    )
     def post(self, request):
         """
         Log out a user by blacklisting their refresh token.
@@ -128,6 +165,12 @@ class PasswordResetRequestView(APIView):
 
     permission_classes = [AllowAny]
 
+    @custom_extend_schema(
+        request=PasswordResetRequestSerializer,
+        summary="Request password reset",
+        description="Request a password reset email",
+        tags=["Authentication"],
+    )
     def post(self, request):
         """
         Request a password reset.
@@ -172,6 +215,12 @@ class PasswordResetConfirmView(APIView):
 
     permission_classes = [AllowAny]
 
+    @custom_extend_schema(
+        request=PasswordResetConfirmSerializer,
+        summary="Confirm password reset",
+        description="Confirm a password reset with token and set new password",
+        tags=["Authentication"],
+    )
     def post(self, request):
         """
         Confirm a password reset.
@@ -225,6 +274,12 @@ class EmailVerificationView(APIView):
 
     permission_classes = [AllowAny]
 
+    @custom_extend_schema(
+        request=EmailVerificationSerializer,
+        summary="Verify email",
+        description="Verify a user's email address with token",
+        tags=["Authentication"],
+    )
     def post(self, request):
         """
         Verify a user's email.

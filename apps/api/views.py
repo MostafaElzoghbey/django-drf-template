@@ -7,11 +7,17 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from apps.core.utils.helpers import format_response
+from apps.core.schemas import custom_extend_schema
 
 
+@custom_extend_schema(
+    summary="API Root",
+    description="API root view that provides information about the API",
+    tags=["API"],
+)
 @api_view(["GET"])
 @permission_classes([AllowAny])
-def api_root(request):
+def api_root(_request):
     """
     API root view that provides information about the API.
     """
